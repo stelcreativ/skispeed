@@ -151,6 +151,20 @@ class User
     }
 
 
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt(){
+    }
+
+    public function eraseCredentials(){
+
+    }
+
+
+
 
 
     /**
