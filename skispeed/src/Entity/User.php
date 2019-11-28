@@ -150,6 +150,7 @@ class User
         return $this;
     }
 
+
     public function getRoles()
     {
         return ['ROLE_USER'];
@@ -161,6 +162,9 @@ class User
     public function eraseCredentials(){
 
     }
+
+
+
 
 
     /**
