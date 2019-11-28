@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,11 @@ class User
     private $password;
 
     /**
+     * @Assert\EqualTo(propertyPath="password", message="La confirmation et le mot de passe ne sont pas identiques!")
+     */
+    private $confirm_password;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -40,6 +47,28 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $resetToken;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    
+    private $isLogged;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Figure", mappedBy="user", orphanRemoval=true)
+     */
+    private $figure;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->figure = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -82,12 +111,15 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -102,6 +134,83 @@ class User
     public function setResetToken(string $resetToken): self
     {
         $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function getIsLogged(): ?bool
+    {
+        return $this->isLogged;
+    }
+
+    public function setIsLogged(bool $isLogged): self
+    {
+        $this->isLogged = $isLogged;
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Figure[]
+     */
+    public function getFigure(): Collection
+    {
+        return $this->figure;
+    }
+
+    public function addFigure(Figure $figure): self
+    {
+        if (!$this->figure->contains($figure)) {
+            $this->figure[] = $figure;
+            $figure->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFigure(Figure $figure): self
+    {
+        if ($this->figure->contains($figure)) {
+            $this->figure->removeElement($figure);
+            // set the owning side to null (unless already changed)
+            if ($figure->getUser() === $this) {
+                $figure->setUser(null);
+            }
+        }
 
         return $this;
     }
