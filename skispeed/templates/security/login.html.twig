@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello !
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Login</h1>
+
+		{% if error %}
+			<div class="alert alert-danger">{{ error.messageKey }}</div>
+		{% endif %}
+
+		<form action="{{ path('security_login') }}" method="POST">
+
+			<input type="text" name="_username" placeholder="Pseudo">
+			<input type="password" name="_password" placeholder="Mot de Passe">
+			<button type="submit">Envoi</button>
+		</form>
+
+		<span>
+			<a href=" {{ path('security_password_forgot') }}">Mot de passe oublié?</a>
+		</span>
+	</div>
+{% endblock %}

@@ -46,10 +46,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/security/password-reset/{token}", name="security_password_reset")
+     * @Route("/security/reset-password/{token}", name="security_reset_password")
      */
 
-     public function passwordReset(Request $request, ObjectManager $em, UserPasswordEncoderInterface $passwordEncoder, string $token)
+     public function resetPassword(Request $request, ObjectManager $em, UserPasswordEncoderInterface $passwordEncoder, string $token)
      {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository(User::class)->findOneByResetToken($token);
@@ -75,7 +75,7 @@ class SecurityController extends AbstractController
                 $this->addFlash('danger', 'Echec de modification du mot de passe! Lien introuvable.');
             }
         }
-        return $this->render('security/passwordReset.html.twig', 
+        return $this->render('security/resetPassword.html.twig', 
         ['form' => $form->createView(),
         'token' => $token
         ]); 
@@ -83,9 +83,9 @@ class SecurityController extends AbstractController
 
 
     /**
-      * @Route("/security/password-forgot", name="security_password_forgot")
+      * @Route("/security/forgot-password", name="security_forgot_password")
       */
-      public function passwordForgot(Request $request, Objectmanager $em, TokenGeneratorInterface $tokengenerator, \Swift_Mailer $mailer)
+      public function forgotPassword(Request $request, Objectmanager $em, TokenGeneratorInterface $tokengenerator, \Swift_Mailer $mailer)
       {
           $form = $this->createForm(ForgotPasswordType::class);
           $form->handleRequest($request);
@@ -100,7 +100,7 @@ class SecurityController extends AbstractController
             if($user === null)
             {
                 $this->addFlash('danger', 'Email Inconnu');
-                return $this->redirectToRoute('security_password_forgot');
+                return $this->redirectToRoute('security_forgot_password');
             }
             
               $token = $tokenGenerator->generateToken();
@@ -110,10 +110,10 @@ class SecurityController extends AbstractController
               $em->flush();
             } catch (\Exception $e) {
                 $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('security_password_forgot');
+                return $this->redirectToRoute('security_forgot_password');
             }
 
-                $url = $this->generateUrl('security_password_reset', ['token'=> $token],
+                $url = $this->generateUrl('security_reset_password', ['token'=> $token],
             UrlGeneratorInterface::ABSOLUTE_URL
             );
 
@@ -121,7 +121,7 @@ class SecurityController extends AbstractController
               ->setFrom($this->getParameter('mailer_user'))
               ->setTo($user->getEmail())
               ->setBody(
-                  $this->renderView('security/passwordForgot.html.twig', [
+                  $this->renderView('security/forgotPassword.html.twig', [
                       'user' => $user
                   ]),
                   'text/html'
@@ -136,7 +136,7 @@ class SecurityController extends AbstractController
                   return $this->redirectToRoute('security_password_forgot');
             }
 
-          return $this->render('security/passwordForgot.html.twig',
+          return $this->render('security/forgotPassword.html.twig',
           [
               'form' => $form->createView()
           ]);
