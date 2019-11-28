@@ -111,12 +111,15 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -134,6 +137,21 @@ class User
 
         return $this;
     }
+
+    public function getIsLogged(): ?bool
+    {
+        return $this->isLogged;
+    }
+
+    public function setIsLogged(bool $isLogged): self
+    {
+        $this->isLogged = $isLogged;
+
+        return $this;
+    }
+
+
+
 
     /**
      * @return Collection|Comment[]
