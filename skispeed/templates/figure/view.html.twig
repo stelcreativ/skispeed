@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="carousel-item active">
+		<img class="w-100" src="{{ asset ('images/stale.jpg') }}" alt="ImageBase">
+		<h2>{{ figure.name }}</h2>
+		{% if app.user %}
+			<div class="userstyle">
+				<a href=" {{ path ('figure_edit', {'slug': figure.slug}) }}">
+					<i class="fas fa-pencil-alt"></i>
+				</a>
+				<a href=" {{ path ('figure_delete', {'slug': figure.slug}) }}">
+					<i class="fas fa-trash-o"></i>
+				</a>
+			</div>
+		{% endif %}
+	</div>
+
+	<div class="container">
+
+		<div class="row" id="media">
+			{% for image in figure.images %}
+				<div class="StyleImage col-sm-4 col-md-3 col-xl-4">
+					<img src="{{ asset ('images/upload' ~ '/' ~ image.name) }}" alt="style">
+				</div>
+			</div>
+		{% endfor %}
+
+		<div class="StyleVideo col-sm-4 col-md-3 col-xl-4">
+			{% for video in figure.video %}
+				<iframe id="video{{ video.id }}"></iframe>
+			</div>
+		{% endfor %}
+
+	</div>
+
+	<div class="row">
+		<div id="fdescription">
+			<h3>Description</h3>
+			{{ figure.description }}
+		</div>
+	</div>
+
+	<div class="row">
+		<h3>Espace de discussion</h3>
+		{% if app.user %}
+			<div class="col-sm-4 col-md-3 col-6 col-xl-4">
+				{{ form_start(form) }}
+				{{ form_widget(form) }}
+				<button type="submit" class="btn btn-success">Envoi</button>
+				{{ form_end(form) }}
+			</div>
+		{% endif %}
+	</div>
+
+	<hr>
+
+	{% for comment in figure.comments %}
+		<div class="col-md-10 col-12mx-auto">
+			<p>{{ comment.user.username }}</p>
+			<br>{{ commen.content }}
+		</div>
+	{% endfor %}
+
+{% endblock %}
