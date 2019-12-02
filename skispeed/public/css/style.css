@@ -1,0 +1,32 @@
+@import url(font-awesome.min.css);
+@import url("https://fonts.googleapis.com/css?family=Signika:300,700");
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 18px;
+  background: skyblue;
+  width: 100%;
+}
+
+.navbar-nav {
+  text-transform: uppercase;
+  margin: 0;
+  border: 0;
+}
+
+.carousel-inner {
+    height: 80vh;
+  }
+  #Snowboardcarousel .item {
+    display: flex;
+  }
+
+.copyright{
+    display: block;
+    text-align: center;
+}
