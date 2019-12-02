@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suppression de figure
+{% endblock %}
+
+{% block body %}
+
+	<div class="container mt-4">
+		<h1>Suppression</h1>
+
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button type="submit" class="btn btn-dark">Supprimer</button>
+		{{ form_end(form)}}
+	</div>
+
+
+{% endblock %}

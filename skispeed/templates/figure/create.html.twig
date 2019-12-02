@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout de figure
+{% endblock %}
+
+{% block body %}
+
+	<div class="col-lg-6 col-md-12 mx-auto">
+		<h1>Créer la figure de style</h1>
+		{{ form_start(form) }}
+
+		{{ form_row(form.name) }}
+		{{ form_row(form.description) }}
+
+
+		<div class="row">
+			<div class="col-sm-6">
+
+				{{ form_widget(form) }}
+
+
+			</div>
+
+		</div>
+
+
+		{{ form_end(form) }}
+
+		{{ form_start(video_form) }}
+		{{ form_widget(video_form) }}
+		{{ form_end(video_form) }}
+
+
+		{{ form_start(image_form) }}
+		{{ form_widget(image_form) }}
+
+
+		{{ form_end(image_form) }}
+
+		<button type="submit" class="btn btn-success btn-lg col-12">
+			<i class="fas fa-check"></i>
+			Ajouter la figure!</button>
+
+	</div>
+
+{% endblock %}

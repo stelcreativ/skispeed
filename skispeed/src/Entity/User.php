@@ -111,6 +111,19 @@ class User
         return $this;
     }
 
+    public function getconfirmPassword(): ?string
+    {
+        return $this->confirm_password;
+    }
+
+    public function setconfirmPassword(string $confirm_password): self
+    {
+        $this->confirm_password = $confirm_password;
+
+        return $this;
+    }
+
+
     /**
      * @return \DateTime
      */

@@ -14,7 +14,8 @@ use App\Form\CommentType;
 use App\Service\Uploader;
 use App\Repository\FigureRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -29,7 +30,7 @@ class FigureController extends AbstractController
      */
 
 
-        public function index($page, ObjectManager $em)
+        public function index($page, EntityManagerInterface $em)
         {
            $displayFigures = $em->getRepository(Figure::class)->$getFiguresList($page);
            $countFigures = $em->getRepository(Figure::class)->$countFigures(); 
@@ -47,7 +48,7 @@ class FigureController extends AbstractController
     /**
      * @Route("/figure/{slug}/{page}", name="figure_view")
      */
-        public function View(Request $request, ObjectManager $em, Figure $figure, $page)
+        public function View(Request $request, EntityManagerInterface $em, Figure $figure, $page)
         {
 
         $comment = new Comment();
@@ -85,7 +86,7 @@ class FigureController extends AbstractController
      * @Route("/figure/create", name="figure_create")
      * 
      */
-    public function create(Request $request, ObjectManager $em, uploader $uploader)
+    public function create(Request $request, EntityManagerInterface $em, uploader $uploader)
     {
         $figure = new Figure();
         $form = $this->createForm(FigureType::class, $figure);
@@ -139,7 +140,7 @@ class FigureController extends AbstractController
      * @Route("/figure/edit/{slug}", name="figure_edit")
      */
 
-    public function edit(Request $request, figureRepository $repo, ObjectManager $em, $slug)
+    public function edit(Request $request, figureRepository $repo, EntityManagerInterface $em, $slug)
     {
 
     $figure =$repo->findOneBySlug($slug);

@@ -8,7 +8,7 @@ use App\Form\RegisterType;
 use App\Form\ResetPasswordType;
 use App\Form\ForgotPasswordType;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
      /**
      * @Route("/register", name="security_register")
      */
-    public function registerAction(Request $request, ObjectManager $em, UserPasswordEncoderInterface $encoder)
+    public function registerAction(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
@@ -49,7 +49,7 @@ class SecurityController extends AbstractController
      * @Route("/security/reset-password/{token}", name="security_reset_password")
      */
 
-     public function resetPassword(Request $request, ObjectManager $em, UserPasswordEncoderInterface $passwordEncoder, string $token)
+     public function resetPassword(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, string $token)
      {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository(User::class)->findOneByResetToken($token);
@@ -85,7 +85,7 @@ class SecurityController extends AbstractController
     /**
       * @Route("/security/forgot-password", name="security_forgot_password")
       */
-      public function forgotPassword(Request $request, Objectmanager $em, TokenGeneratorInterface $tokengenerator, \Swift_Mailer $mailer)
+      public function forgotPassword(Request $request, EntityManagerInterface $em, TokenGeneratorInterface $tokengenerator, \Swift_Mailer $mailer)
       {
           $form = $this->createForm(ForgotPasswordType::class);
           $form->handleRequest($request);
