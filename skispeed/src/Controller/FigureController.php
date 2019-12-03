@@ -99,7 +99,7 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            foreach($figure->getImages() as $image)
+            foreach($figure->getImage() as $image)
             {
       
                 $image->setFigure($figure);
@@ -107,7 +107,7 @@ class FigureController extends AbstractController
                 $manager->persist($image);
             }
 
-            foreach($figure->getVideos() as $video)
+            foreach($figure->getVideo() as $video)
             {
                 $video->setFigure($figure);
                 $em->persist($video);
@@ -152,7 +152,7 @@ class FigureController extends AbstractController
     if($form->isSubmitted() && $form->isValid())
 
     {
-        foreach($figure->getImages() as $image)
+        foreach($figure->getImage() as $image)
         {
             $image->setFigure($figure);
             $em->persist($image);

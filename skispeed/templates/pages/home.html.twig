@@ -40,4 +40,41 @@
 		</div>
 	</div>
 
+
+	<div class="container display">
+		<div class="row">
+			<h4>Voir les figures</h4>
+			{% for figure in figures %}
+				<div class="col-md-4 col-sm-6">
+					<div class="card h-150">
+						{{ figure.name }}
+						<a href="{{ path('figure_view', {'slug': figure.slug}) }}">
+							{% for image.figure in image.figures %}
+								<img class="card-img-top" height="150px">
+								src = "{{ asset('Images/uploads/') }}"
+							{% endfor %}
+
+							{% for video.figure in video.figures %}
+								<a href="#"></a>
+							{% endfor %}
+						</a>
+					</div>
+				</div>
+			{% endfor %}
+
+			{% if app.user %}
+				<h4>Créer une figure</h4>
+				<a href=" {{ path ('figure_create') }}">
+					<button type="button" class="btn btn-outline-success">Success</button>
+				</a>
+				<a href=" {{ path ('figure_edit') }}">
+					<button type="button" class="btn btn-outline-success">Editer</button>
+				</a>
+				<a href=" {{ path ('figure_delete') }}">
+					<button type="button" class="btn btn-alert">Supprimer</button>
+				</a>
+			</div>
+		</div>
+	{% endif %}
+
 {% endblock %}
