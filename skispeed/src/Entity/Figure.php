@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -109,7 +110,7 @@ class Figure
 
     public function getSlug(): ?string
     {
-        return $this->slug;
+        return (new Slugify())->slugify($this->slug);
     }
 
     public function setSlug(string $slug): self
