@@ -19,7 +19,8 @@ class Image
     private $id;
 
     /**
-     * @var UploadedFile
+     * @var File
+     * @var UploadedFile(name="name, url="images/uploads")
      * @Assert\File(mimeTypes={"image/png", "image/jpeg"},
      * maxSize = "3000000"
      * )
@@ -37,6 +38,11 @@ class Image
      * @ORM\Column(type="string", length=255)
      */
     private $url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
 
     
 
@@ -66,6 +72,29 @@ class Image
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

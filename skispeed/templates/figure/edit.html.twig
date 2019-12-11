@@ -13,10 +13,16 @@
 
 		<div class="row">
 			<div class="col-sm-6">
-				{{ form_errors(form.Image.file) }}
-				{{ form_widget(form.Image.file) }}
-				{{ form_help(form.Image.file) }}
-			</div>
-		</div>
+				{{ form_errors(form) }}
+				{{ form_widget(form) }}
+				{{ form_help(form) }}
 
-	{% endblock %}
+				{% for image in figure.image %}
+					<div class="StyleEdit">
+						<img<span height="150px" src="{{ asset('images/uploads/' ~ image.name) }}" </div> {% endfor %} <button type="submit" class="btn btn-success"> class="fa fa-pencil">Éditer la figure</span>
+					</button>
+					{{ form_end(form) }}
+				</div>
+			</div>
+
+		{% endblock %}

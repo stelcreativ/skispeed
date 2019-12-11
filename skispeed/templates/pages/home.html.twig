@@ -5,8 +5,6 @@
 
 
 {% block body%}
-
-
 	<div id="Snowboardcarousel" class="carousel slide" data-ride="carousel">
 
 		<ol class="carousel-indicators">
@@ -40,40 +38,106 @@
 		</div>
 	</div>
 
-
-	<div class="container display">
-		<div class="row">
-			<h4>Voir les figures</h4>
+	<div class="container">
+		<div class="row" id="listSkifigure">
 			{% for figure in figures %}
+
 				<div class="col-md-4 col-sm-6">
-					<div class="card h-150">
-						{{ figure.name }}
-						<a href="{{ path('figure_view', {'slug': figure.slug}) }}">
-							{% for image in images %}
-								<img class="card-img-top" height="150px" src="{{ asset('Images/uploads/') }}">
-							{% endfor %}
+					<div class="card">
+						<a href="{{ path('figure_view', {'figure.id': figure.id}) }}">
+							{% if figure.frontImage is not null %}
+								<img src="{{ asset(figure.frontImage ~ '/' ~ figure.frontImage.name) }}">
+							{% else %}
+								<img src="{{ asset('images/snowslide1.jpg') }}">
+							{% endif %}
+							<div class="card-body text-center">
+								<h5 class="card-title">
+									{{ figure.name }}
 
-							{% for video in videos %}
-								<a href="#"></a>
-							{% endfor %}
-						</a>
-					</div>
+									{% if app.user %}
+
+										<a href=" {{ path('figure_edit', {'figure.id': figure.id}) }}">
+											<i class="fas fa-pencil-alt"></i>
+											<button type="button" class="btn btn-outline-success">Editer</button>
+										</a>
+										<a href=" {{ path('figure_delete', {'figure.id': figure.id}) }}">
+											<i class="fas fa-trash-alt"></i>
+											<button type="button" class="btn btn-alert">Supprimer</button>
+										</a>
+									</div>
+								{% endif %}
+
+
+							</h5>
+						</div>
+					</a>
 				</div>
-			{% endfor %}
-
-			{% if app.user %}
-				<h4>Créer une figure</h4>
-				<a href=" {{ path ('figure_create') }}">
-					<button type="button" class="btn btn-outline-success">Success</button>
-				</a>
-				<a href=" {{ path ('figure_edit') }}">
-					<button type="button" class="btn btn-outline-success">Editer</button>
-				</a>
-				<a href=" {{ path ('figure_delete') }}">
-					<button type="button" class="btn btn-alert">Supprimer</button>
-				</a>
 			</div>
-		</div>
-	{% endif %}
+		{% endfor %}
+	</div>
+</div>
 
-{% endblock %}
+{#{% if app.user %}
+													<h4>Créer une figure</h4>
+													<a href=" {{ path('figure_create') }}">
+														<button type="button" class="btn btn-outline-success">Success</button>
+													</a>
+												{% endif %}
+											
+											
+												<div class="container display">
+													<div class="row flex">
+														<h4>Voir les figures</h4>
+														{% for figure in figures %}
+															<div class="col-md-4 col-sm-6">
+																<div class="card h-150">
+																	<div class="card-body text-center">
+																		<h5 class="card-title">
+																			{{ dump(figure) }}
+											
+											
+																			<a href="{{ path('figure_view', {'figure.id': figure.id}) }}">
+																				{{ figure.name }}
+																				{% for image in figure.image %}
+																					<img class="card-img-top" height="150px" src="{{ asset('Images/uploads/' ~ figure.image.0.url) }}">
+																				{% endfor %}
+																			</a>
+																		</h5>
+																	</div>
+																</div>
+															</div>
+														{% endfor %}
+											
+														{% if app.user %}
+											
+				
+												</div> #}{% endblock %}{% block javascripts %}
+<script type="text/javascript">
+	$(document).ready(function () {
+
+var limit = 7;
+var start = 0;
+var action = 'inactive';
+function load_country_data(limit, start) {
+$.ajax({
+url: "fetch.php",
+method: "POST",
+data: {
+limit: limit,
+start: start
+},
+cache: false,
+success: function (data) {
+$('#load_data').append(data);
+if (data == '') {
+$('#load data message').html("<button type='button' class='btn btn-info'>No Data found</button>");
+action = "active";
+} else {
+$('#load_data_message').html("<button type='button' class='btn btn-info'>Please Wait....</button>");
+action = "inactive";
+}
+}
+})
+}
+})
+</script>{% endblock %}

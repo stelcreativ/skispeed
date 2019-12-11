@@ -2,31 +2,33 @@
 
 namespace App\Service;
 
-use App\Entity\Image;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Uploader {
 
-    /**
-     * Donner un nom et un path à l'image à enregistrer en BDD
-     *
-     * @param Image $image
-     * @return Image $image
-     */
-    public function upload(Image $image): Image
+    private $targetDirectory;
+
+    public function __construct($targetDirectory)
     {
-        // Uploader le fichier de l'image
-        $file = $image->getFile();
+        $this->targetDirectory = $targetDirectory;
+    }
+
+    public function upload(UploadedFile $file)
+    {
+
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         // Créer un nom unique pour le fichier
         $name = md5(uniqid()) . '.' . $file->guessExtension();
         // Déplacer le fichier
        
-        $file->move($this->getParameter['upload_directory'], $name);
+        $file->move($this->getTargetDirectory(), $name);
 
-        // Donner le path et le nom au fichier dans la base de données
-        $image->setUploadDirectory($url);
-        $image->setName($name);
 
-        return $image;
+        return $name;
     }
 
+    public function getTargetDirectory()
+    {
+        return $this->targetDirectory();
+    }
 }

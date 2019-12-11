@@ -7,9 +7,10 @@ use App\Form\LoginType;
 use App\Form\RegisterType;
 use App\Form\ResetPasswordType;
 use App\Form\ForgotPasswordType;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
+
      /**
      * @Route("/register", name="security_register")
      */
@@ -28,8 +30,11 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $password= $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
+            $password= $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password)
+                ->setCreatedAt(new \DateTime)
+                ->setResetToken(md5(random_bytes(10)))
+                ->setIsLogged(true);
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($user);
@@ -173,7 +178,5 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="security_logout")
      */
-    public function logout() {
-        
-    }
+    public function logout() {}
 }

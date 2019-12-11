@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Figure;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Figure|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,15 +20,30 @@ class FigureRepository extends ServiceEntityRepository
         parent::__construct($registry, Figure::class);
     }
 
+    /**
+    * @return figure[]
+    */
+    public function findOneBySlug(string $slug)
+    {
+        return $this->createQueryBuilder('figure')
+            ->select('figure.slug')
+            ->where('slug IS NOT NULL') 
+            ->setParameter('slug', $slug)
+            ->orderBy('figure.id', 'DESC')
+            ->getQuery()
+            ->getResult();
 
+    
+    }
+ 
     /**
      * @param integer $page
      */
 
     public function getFiguresList($page)
     {
-        $query = $this->createQueryBuilder('f')
-        ->orderBy('f.createAt', 'DESC')
+        $query = $this->createQueryBuilder('figure')
+        ->orderBy('figure.createdAt', 'DESC')
         ->setFirstResult(($page-1) * 6)
         ->setMaxResults(6)
         ->getQuery();
@@ -37,10 +53,21 @@ class FigureRepository extends ServiceEntityRepository
 
     public function countFigures()
     {
-       return $this->createQueryBuilder('f')->select("COUNT(DISTINCT f.id)")->getQuery()->getSingleScalarResult();
+       $count = $this->createQueryBuilder('figure')
+       ->select("COUNT(DISTINCT figure.id)")
+       ->getQuery()
+       ->getSingleScalarResult();
+
+       return $count;
     }
 
-
+    public function findAllVisible()
+    {
+        return $this->findVisibleQuery()
+        ->where('figure.id = true')
+        ->getQuery()
+        ->getResult();
+    }
 
     // /**
     //  * @return Figure[] Returns an array of Figure objects

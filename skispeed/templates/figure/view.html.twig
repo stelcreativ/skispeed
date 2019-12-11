@@ -3,14 +3,16 @@
 {% block body %}
 
 	<div class="carousel-item active">
-		<img class="w-100" src="{{ asset ('images/stale.jpg') }}" alt="ImageBase">
+		<img class="w-100" src="{{ asset (figure.frontImage ~ '/' ~ figure.mainImage.name) }}" alt="ImageBase">
 		<h2>{{ figure.name }}</h2>
 		{% if app.user %}
 			<div class="userstyle">
-				<a href=" {{ path ('figure_edit', {'slug': figure.slug}) }}">
+				<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
 					<i class="fas fa-pencil-alt"></i>
 				</a>
-				<a href=" {{ path ('figure_delete', {'slug': figure.slug}) }}">
+				<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
+				<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
+				<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
 					<i class="fas fa-trash-o"></i>
 				</a>
 			</div>
@@ -22,13 +24,13 @@
 		<div class="row" id="media">
 			{% for image in figure.images %}
 				<div class="StyleImage col-sm-4 col-md-3 col-xl-4">
-					<img src="{{ asset ('images/upload' ~ '/' ~ image.name) }}" alt="style">
+					<img src="{{ asset('images/upload' ~ '/' ~ image.name) }}" alt="style">
 				</div>
 			</div>
 		{% endfor %}
 
 		<div class="StyleVideo col-sm-4 col-md-3 col-xl-4">
-			{% for video in figure.video %}
+			{% for video in figure.videos %}
 				<iframe id="video{{ video.id }}"></iframe>
 			</div>
 		{% endfor %}
@@ -57,11 +59,12 @@
 	<hr>
 
 	{% for comment in figure.comments %}
-		<div class="col-md-10 col-12mx-auto">
-			<p>{{ comment.user.username }}</p>
-			<br>{{ commen.content }}
+		<div class="row">
+			<div class="col-md-10 col-12 mx-auto">
+				<p>{{ comment.user.username }}</p>
+				<br>{{ comment.content }}
+			</div>
 		</div>
 	{% endfor %}
 
 {% endblock %}
-© 2019 GitHub, Inc.

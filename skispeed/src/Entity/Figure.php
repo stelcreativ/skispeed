@@ -60,6 +60,11 @@ class Figure
      */
     private $user;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"})
+     */
+    private $frontFigure;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
@@ -110,7 +115,7 @@ class Figure
 
     public function getSlug(): ?string
     {
-        return (new Slugify())->slugify($this->slug);
+        return (new Slugify())->slugify($this->name);
     }
 
     public function setSlug(string $slug): self
@@ -149,6 +154,14 @@ class Figure
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->video;
     }
 
     /**
@@ -221,6 +234,30 @@ class Figure
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getFrontFigure(): ?Image
+    {
+        return $this->frontFigure;
+    }
+
+    public function setFrontFigure(?Image $frontFigure): self
+    {
+        $this->frontFigure = $frontFigure;
+
+        return $this;
+    }
+
+    public function getfrontImage(): ?addImage
+    {
+        return $this->frontImage;
+    }
+
+    public function setfrontImage(Image $frontImage): self
+    {
+        $this->frontImage = $frontImage;
 
         return $this;
     }
