@@ -60,10 +60,6 @@ class Figure
      */
     private $user;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist", "remove"})
-     */
-    private $frontFigure;
 
     public function __construct()
     {
@@ -129,6 +125,14 @@ class Figure
      * @return Collection|Image[]
      */
     public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
     {
         return $this->image;
     }
@@ -226,6 +230,14 @@ class Figure
         return $this;
     }
 
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comment;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -238,27 +250,17 @@ class Figure
         return $this;
     }
 
-    public function getFrontFigure(): ?Image
-    {
-        return $this->frontFigure;
-    }
-
-    public function setFrontFigure(?Image $frontFigure): self
-    {
-        $this->frontFigure = $frontFigure;
-
-        return $this;
-    }
-
-    public function getfrontImage(): ?addImage
+    public function getFrontImage(): ?Image
     {
         return $this->frontImage;
     }
 
-    public function setfrontImage(Image $frontImage): self
+    public function setFrontImage(?Image $frontImage): self
     {
         $this->frontImage = $frontImage;
 
         return $this;
     }
+
+
 }

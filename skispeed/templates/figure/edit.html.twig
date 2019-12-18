@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edition de figure
+{% block title %}Edition de figures
 {% endblock %}
 
 {% block body %}
@@ -16,13 +16,16 @@
 				{{ form_errors(form) }}
 				{{ form_widget(form) }}
 				{{ form_help(form) }}
-
-				{% for image in figure.image %}
-					<div class="StyleEdit">
-						<img<span height="150px" src="{{ asset('images/uploads/' ~ image.name) }}" </div> {% endfor %} <button type="submit" class="btn btn-success"> class="fa fa-pencil">Éditer la figure</span>
-					</button>
-					{{ form_end(form) }}
-				</div>
+				{ dump(images) }
+				{% for image in figure.images %}
+					<div class="StyleEdit"><input type="hidden" name="image_to_keep" value="{{ image.id }}">
+						<img class="img-card-top" height="350px" src="{{ asset('images/uploads/' ~ image.name) }}">
+					</div>
+				{% endfor %}
+				<button type="submit" class="btn btn-success">
+					<span class="fa fa-pencil">Éditer la figure</span>
+				</button>
+				{{ form_end(form) }}
 			</div>
-
-		{% endblock %}
+		</div>
+	{% endblock %}

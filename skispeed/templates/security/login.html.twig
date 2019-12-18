@@ -7,19 +7,27 @@
 	<div class="container mt-4">
 		<h1>Login</h1>
 
-		{% if error %}
-			<div class="alert alert-danger">{{ error.messageKey }}</div>
-		{% endif %}
+
+		{#	{% if error %}
+					<div class="alert alert-danger">{{ error.messageKey }}</div>
+				{% endif %}
+		
+				{{ form_start(form) }}
+		
+				{{ form_widget(form) }}
+				<button type="submit" class="btn btn-dark">Envoi</button>
+				{{ form_end(form)}}#}
 
 		<form action="{{ path('security_login') }}" method="POST">
-
-			<input type="text" name="_username" placeholder="Pseudo">
-			<input type="password" name="_password" placeholder="Mot de Passe">
+			<input type="text" name="_username" placeholder="Pseudo"/>
+			<input type="password" name="_password" placeholder="Mot de Passe"/>
 			<button type="submit">Envoi</button>
 		</form>
 
 		<span>
 			<a href=" {{ path('security_forgot_password') }}">Mot de passe oublié?</a>
 		</span>
+
+
 	</div>
 {% endblock %}

@@ -7,16 +7,20 @@
 {% block body%}
 
 	<div class="container">
-		<h2>Votre profil</h2>
-		<ul>
-			<li>Pseudo :
-				{{ app.user.username }}</li>
-			<li>Email :
-				{{ app.user.email }}</li>
-			<li>Inscription le :
-				{{ app.user.createdAt|date('m/d/Y') }}</li>
-		</ul>
+		<div class="row">
+			<div class="col-12">
+				<h2>Votre profil</h2>
+				<ul>
+					<li>Pseudo :
+						{{ app.user.username }}</li>
+					<li>Email :
+						{{ app.user.email }}</li>
+					<li>Inscription le :
+						{{ app.user.createdAt|date('m/d/Y') }}</li>
+				</ul>
+			</div>
 
+		</div>
 
 	</div>
 

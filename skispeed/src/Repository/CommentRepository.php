@@ -20,7 +20,18 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-   /* public function displayComments(figure $figure, $page, $maxPerpage)
+/*
+     public function findOneBy(string $figure)
+    {
+        $query = $this->createQueryBuilder('c')
+        ->where('c.figure = :figure')
+        ->setParameter('figure', $figure)
+        ->orderBy('c.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+*/
+   /* public function displayFigures(figure $figure, $page, $maxPerpage)
     {
         $query = $this->createQueryBuilder('c')
         ->where('c.figure = :figure')

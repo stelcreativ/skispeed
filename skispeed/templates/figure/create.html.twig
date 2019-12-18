@@ -11,14 +11,23 @@
 
 		{{ form_row(form.name) }}
 		{{ form_row(form.description) }}
+		<!-- Ajout Images-->
+		{% for image in form.images %}
+			{{ form_row(form.images) }}
 
-		{{ form_row(form.image) }}
+			<ul class="image" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+				<img class="img-card-top" src="{{ asset('images/uploads/' ~ image.name) }}">
+				{{ form_row(form.file, {'attr': {'class': 'hide-input'}}) }}
+			</ul>
+
+		{% endfor %}
 		<div class="custom-file">
 			<input type="file" class="custom-file-input" id="customFile">
 			<label class="custom-file-label" for="customFile">Choisir un fichier</label>
 		</div>
-		{{ form_row(form.video) }}
-
+		{% for image in form.videos %}
+			{{ form_row(form.videos) }}
+		{% endfor %}
 
 		{{ form_end(form) }}
 		<div class="row">

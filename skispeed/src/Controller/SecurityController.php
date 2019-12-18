@@ -51,19 +51,19 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/security/reset-password/{token}", name="security_reset_password")
+     * @Route("/security/reset-password/{resetToken}", name="security_reset_password")
      */
 
-     public function resetPassword(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, string $token)
+     public function resetPassword(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, string $resetToken)
      {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository(User::class)->findOneByResetToken($token);
+        $user = $em->getRepository(User::class)->findOneByResetToken($resetToken);
         
         $form =$this->createForm(ResetPasswordType::class,$user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            if($user->getToken() === $token)
+            if($user->getResetToken() === $resetToken)
             {
                 $password = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($password);
@@ -82,7 +82,7 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/resetPassword.html.twig', 
         ['form' => $form->createView(),
-        'token' => $token
+        'resetToken' => $resetToken
         ]); 
     }
 
@@ -161,7 +161,7 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', 
         ['form' => $form->createView(),
-        'last_username' => $lastUsername,
+        'lastUsername' => $lastUsername,
         'error'         => $error,
          ]);
     }

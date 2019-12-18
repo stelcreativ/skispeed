@@ -2,29 +2,27 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CommentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('email')
-            ->add('password')
-            ->add('CreatedAt')
-            ->add('token')
-            ->add('isLogged')
-        ;
+            ->add('content', TextareaType::class)
+            ->add('save', SubmitType::class,
+            ['label' => 'Validez le commentaire']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Comment::class,
         ]);
     }
 }

@@ -15,12 +15,30 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+    const FIGURE_REFERENCE = 'Figures';
+
     public function load(ObjectManager $em)
     {
     $faker = \Faker\Factory::create('fr_FR');
     
-
-
+    $figureList = [
+                    ['bigair',
+                    ' Il s\'agit d\'un tremplin permettant d\'effectuer des figures dans les airs.'],
+                    ['flair',
+                    'Flip arrière avec une rotation latérale de 180°. Il s\'agit de sauter, tourner et atterrir.'],
+                    ['grab',
+                    'Consiste à attraper avec la main un bout du ski pendant le saut.'],
+                    ['lipslide',
+                    'ton tail passe par dessus le rail pour slider alors qu\'en normal,ton nose passe par dessus le rail.'],
+                    ['liukang',
+                    'variante du safety dans laquelle la jambe dont le ski n\'est pas grabé est tendue. '],
+                    ['mute',
+                    'saisie de ski à l\'avant de la fixation avec la main opposée au ski saisi.'],
+                    ['philgrab',
+                    'variante du safety dans laquelle les skis sont croisés au lieu d\'être parallèles.'],
+                    ['rotation360',
+                    'Une fois que le tour complet est réalisé, le skieur devra affiner son impulsion et sa réception pour réaliser le 360 parfait.']
+        ];
     // 4 Users
     for ($i=0; $i<5; $i++)
     {
@@ -37,24 +55,27 @@ class AppFixtures extends Fixture
 
 
     // 8 figures
-    for($i=0; $i<5; $i++)
+    $i=1;
+    foreach($figureList as list($name, $description))
     {
         $figure = new Figure();
-        $figure->setName('bigair')
-               ->setDescription('Il s\'agit d\'effectuer des figures dans les airs') 
+        $figure->setName($name)
+               ->setDescription($description) 
                 ->setCreatedAt($faker->dateTimeBetween('-6 months'))
-                ->setSlug('bigair_style')
-                ->setUser($user1);
+                ->setSlug($name. '_style')
+                ->setUser($user);
                 
-                for($i=0; $i<5; $i++)
+                for($i=1; $i<4; $i++)
             {
             $image = new Image();
              $image->setUrl('images/uploads')
-                   ->setName('bigair_sm.jpg') 
+                   ->setName($name . '_sm' . $i . '.jpg') 
                    ->setFigure($figure);
 
             $em->persist($image);
             $figure->addImage($image);
+
+
             }
 
             for ($v=0; $v<mt_rand(1, 2); $v++)
@@ -68,97 +89,11 @@ class AppFixtures extends Fixture
 
             $em->persist($figure);      
         
-        // nouvelle figure    
-        $figure = new Figure();
-        $figure->setName('flair')
-               ->setDescription('Flip arrière avec une rotation latérale de 180°. Il s\'agit de sauter, tourner et atterrir.') 
-                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
-                ->setSlug('flair_style')
-                ->setUser($user);
-
-                for($i=0; $i<5; $i++)
-                {
-                $image = new Image();
-                 $image->setUrl('images/uploads')
-                       ->setName('flair_sm.jpg') 
-                       ->setFigure($figure);
-    
-                $em->persist($image);
-                $figure->addImage($image);
-                }
-    
-                for ($v=0; $v<mt_rand(1, 2); $v++)
-                {
-                $video =new Video();
-                $video->setUrl('https://youtu.be/rW3-b4qsFWs')
-                 ->setFigure($figure);
-                $em->persist($video);
-                $figure->addVideo($video);
-                }
-    
-                $em->persist($figure);    
-
-        // nouvelle figure        
-        $figure = new Figure();
-        $figure->setName('grab') 
-               ->setDescription('Consiste à attraper avec la main un bout du ski pendant le saut.') 
-                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
-                ->setSlug('grab_style')
-                ->setUser($user);
-                for($i=0; $i<5; $i++)
-                {
-                $image = new Image();
-                 $image->setUrl('images/uploads')
-                       ->setName('grab_sm.jpg') 
-                       ->setFigure($figure);
-    
-                $em->persist($image);
-                $figure->addImage($image);
-                }
-    
-                for ($v=0; $v<mt_rand(1, 2); $v++)
-                {
-                $video =new Video();
-                $video->setUrl('https://www.youtube.com/watch?v=z-gD3esFIm8')
-                 ->setFigure($figure);
-                $em->persist($video);
-                $figure->addVideo($video);
-                }
-    
-                $em->persist($figure);
-
-        //new
-        $figure = new Figure();
-        $figure->setName('lipslide') 
-               ->setDescription('ton tail passe par dessus le rail pour slider alors qu\'en normal,ton nose passe par dessus le rail.') 
-                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
-                ->setSlug('lipslide_style')
-                ->setUser($user);
-                for($i=0; $i<5; $i++)
-                {
-                $image = new Image();
-                 $image->setUrl('images/uploads')
-                       ->setName('lipslide_sm.jpg') 
-                       ->setFigure($figure);
-    
-                $em->persist($image);
-                $figure->addImage($image);
-                }
-    
-                for ($v=0; $v<mt_rand(1, 2); $v++)
-                {
-                $video =new Video();
-                $video->setUrl('https://youtu.be/rW3-b4qsFWs')
-                 ->setFigure($figure);
-                $em->persist($video);
-                $figure->addVideo($video);
-                }
-    
-                $em->persist($figure);
-
+            $this->setReference(self::FIGURE_REFERENCE . $i, $figure);
+            $i++;
 
        
-            // 9 comments
+            // 8 commentaires
          for ($c=0; $c<9; $c++)   
          {
              $comment = new Comment();
@@ -176,4 +111,5 @@ class AppFixtures extends Fixture
 
         $em->flush();
     }
+
 }

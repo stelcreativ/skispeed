@@ -40,12 +40,11 @@ class FigureController extends AbstractController
 
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
 
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-        $image = $form['image']->getData();
-            foreach($figure->getImage() as $image)
+            $image = $form['image']->getData();
+            foreach($figure->getImages() as $image)
             {
       
                 $image->setFigure($figure)
@@ -54,7 +53,7 @@ class FigureController extends AbstractController
                 $em->persist($image);
             }
 
-            foreach($figure->getVideo() as $video)
+            foreach($figure->getVideos() as $video)
             {
                 $video->setFigure($figure);
                 $em->persist($video);
@@ -87,22 +86,22 @@ class FigureController extends AbstractController
     }
 
     /**
-     * @param $page
      * @param Request $request
-     * @Route("/figure/view/{page}", name="figure_view")
+     * @Route("/figure/view/{id}", name="figure_view")
      */
-        public function View(Request $request, EntityManagerInterface $em, Figure $figure, $id, $page = 1)
+        public function View(Request $request, figureRepository $repo, EntityManagerInterface $em, $id)
         {
+           $figure = $em->getRepository(Figure::class)->findOneById($id);
 
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
-        $figure = $this->getDoctrine()->getRepository(Figure::class)->findOneById($id);
+ 
     
         if ($form->isSubmitted() && $form->isValid())
         {
-            $comment->setContent();
+             $comment->setContent();
             $comment->setCreatedAt(new \DateTime())
                     ->setFigure($figure)
                     ->setSlug($slug)
@@ -112,28 +111,26 @@ class FigureController extends AbstractController
             $em->flush();
 
             $this->addFlash("success", "Votre commentaire a bien été ajouté!");
-            return $this->redirectToRoute('figure_view', [
-                'id' => $figure->getId()
+            return $this->redirectToRoute('figure/view.html.twig', [
+                'figure' => $figure
             ]);
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $comments = $em->getRepository(Comment::class)->findBy(['figure' => $figure], ['CreatedAt' => 'DESC']);
 
 
         return $this->render('figure/view.html.twig', [
-            'form' => $form->createView(),
+            'CommentForm' => $form->createView(),
             'figure' =>$figure,
-            'nbpages' =>ceil($countComments /6),
-            'page' => $page,
             'comment' => $comment
 
         ]);
 
     }
 
+
+
     /**
-     * @Route("/figure/edit/{slug}", name="figure_edit")
+     * @Route("/figure/edit/{id}", name="figure_edit")
      * @param  Figure $figure
      * @IsGranted("ROLE_USER")
      */
@@ -141,7 +138,7 @@ class FigureController extends AbstractController
     public function edit(Request $request, figureRepository $repo, EntityManagerInterface $em, $id)
     {
 
-    $figure = $this->getDoctrine()->getRepository(Figure::class)->findBy(['id' => $id]);
+    $figure = $em->getRepository(Figure::class)->findOneById($id);
 
     $form =$this->createForm(FigureType::class, $figure);
 
@@ -162,7 +159,7 @@ class FigureController extends AbstractController
             'success', 'Lafigure a bien été modifiée!'
         );
 
-        return $this->redirectToRoute('figure/view', [
+        return $this->redirectToRoute('figure_view', [
             'id' => $figure->getId(),
 
         ]);
@@ -174,7 +171,7 @@ class FigureController extends AbstractController
 }
 
     /**
-     * @Route("/figure/delete/{slug}", name="figure_delete")
+     * @Route("/figure/delete/{id}", name="figure_delete")
      * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, Figure $figure)

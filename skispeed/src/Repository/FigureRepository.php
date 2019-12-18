@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Figure;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -27,7 +26,7 @@ class FigureRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('figure')
             ->select('figure.slug')
-            ->where('slug IS NOT NULL') 
+            ->andWhere('figure.slug = :slug') 
             ->setParameter('slug', $slug)
             ->orderBy('figure.id', 'DESC')
             ->getQuery()

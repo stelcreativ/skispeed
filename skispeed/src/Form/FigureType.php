@@ -31,20 +31,18 @@ class FigureType extends AbstractType
             'attr' => ['placeholder' => 'Description de la figure'],
             'constraints' => [new NotBlank(['message' => 'Veuillez saisir la description']),
                 new Length(['max' => 1500, 'maxMessage' => 'Le message ne doit pas contenir plus de 1500 caractères'])]])
-
-                ->add('image',FileType::class,array('data_class'=> null, 'label' => 'Image'))
                 
                 
-            ->add('image', CollectionType::class, [
+            ->add('images', CollectionType::class, [
                 'entry_type'    => ImageType::class,
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'required'      => false,
                 'by_reference'  => false,
-                'mapped'  => false
+
                 ])
 
-            ->add('video', CollectionType::class, [
+            ->add('videos', CollectionType::class, [
                     'entry_type'    => VideoType::class,
                     'allow_add'     =>  true,
                     'allow_delete'  =>  true,
@@ -53,11 +51,18 @@ class FigureType extends AbstractType
                 ]
             )
 
-            ->add('save', SubmitType::class, array(
+            ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer la figure',
-                 'attr'=> array('class'=>'btn btn-success submitButton') 
-                 ))
-;
+                 'attr'=> ['class'=>'btn btn-success submitButton'] 
+                ] )
+                
+             ->add('cancel',
+                    ButtonType::class,
+                    [
+                    'label' => "Annuler"
+                    ]
+                );
+
 
     }
 

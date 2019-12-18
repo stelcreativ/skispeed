@@ -2,69 +2,147 @@
 
 {% block body %}
 
-	<div class="carousel-item active">
-		<img class="w-100" src="{{ asset (figure.frontImage ~ '/' ~ figure.mainImage.name) }}" alt="ImageBase">
-		<h2>{{ figure.name }}</h2>
-		{% if app.user %}
-			<div class="userstyle">
-				<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
-					<i class="fas fa-pencil-alt"></i>
-				</a>
-				<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
-				<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
-				<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
-					<i class="fas fa-trash-o"></i>
-				</a>
+
+	<div class="container media">
+
+		{% for image in figure.images %}
+			<h2>{{figure.name}}</h2>
+			{% if loop.index == 1 %}
+				<div class="container">
+					<div class="carousel-item active">
+						<img class="w-100" src="{{ asset('images/uploads/' ~ image.name) }}" alt="ImageBase">
+					</div>
+
+					{% if app.user %}
+						<div class="userstyle">
+							<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
+							<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
+							<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
+								<i class="fas fa-trash-o"></i>
+							</a>
+						</div>
+
+					{% endif %}
+				{% endif %}
+
+
+			{% else %}
+
+				<div class="carousel-item active">
+					<img class="card-img-top" height='500px' width='auto' src="{{ asset('images/snowslide1.jpg') }}"></div>
+				{% if app.user %}
+					<div class="userstyle">
+						<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
+							<i class="fas fa-pencil-alt"></i>
+						</a>
+						<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
+						<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
+						<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
+							<i class="fas fa-trash-o"></i>
+						</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+
+		<div class="container">
+			<div class="row">
+				{{dump(figure)}}
+
+				{% for image in figure.images %}
+					{% if loop.index == 1 %}
+						<div class="col-lg-4">
+							<div class="card">
+								<img src="{{ asset('images/uploads/' ~ image.name) }}" alt="style" width="100%">
+							</div>
+						</div>
+
+					{% endif %}
+				{% endfor %}
+
 			</div>
-		{% endif %}
-	</div>
-
-	<div class="container">
-
-		<div class="row" id="media">
-			{% for image in figure.images %}
-				<div class="StyleImage col-sm-4 col-md-3 col-xl-4">
-					<img src="{{ asset('images/upload' ~ '/' ~ image.name) }}" alt="style">
+			<div class="embed-responsive embed-responsive-16by9">
+				{% for video in figure.videos %}
+					{#<iframe id="video{{ video.id }}" width="100%"></iframe> #}
+					<iframe class="embed-responsive-item" src="https://www.youtube.com/watch?v=z-gD3esFIm8" allowfullscreen></iframe>
 				</div>
-			</div>
-		{% endfor %}
+			{% endfor %}
 
-		<div class="StyleVideo col-sm-4 col-md-3 col-xl-4">
-			{% for video in figure.videos %}
-				<iframe id="video{{ video.id }}"></iframe>
-			</div>
-		{% endfor %}
-
+		</div>
 	</div>
 
 	<div class="row">
 		<div id="fdescription">
-			<h3>Description</h3>
-			{{ figure.description }}
-		</div>
-	</div>
 
+			<h3>Description</h3>
+			{{ figure.description }}</div>
+	</div>
 	<div class="row">
 		<h3>Espace de discussion</h3>
 		{% if app.user %}
 			<div class="col-sm-4 col-md-3 col-6 col-xl-4">
-				{{ form_start(form) }}
-				{{ form_widget(form) }}
+				{{ form_start(CommentForm) }}
+				{{ form_widget(CommentForm) }}
 				<button type="submit" class="btn btn-success">Envoi</button>
-				{{ form_end(form) }}
+				{{ form_end(CommentForm) }}
+
 			</div>
 		{% endif %}
-	</div>
 
-	<hr>
-
+	</div><hr>
 	{% for comment in figure.comments %}
 		<div class="row">
-			<div class="col-md-10 col-12 mx-auto">
-				<p>{{ comment.user.username }}</p>
-				<br>{{ comment.content }}
+			<div class="col-lg-6 col-xs-12 mx-auto">
+				<p>
+					{{ comment.user }}, le
+					{{ comment.createdAt | date('d/m/Y à H:i') }}
+				</p>
+				<br>
+
+				{{ comment.content }}
 			</div>
 		</div>
 	{% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+
+	<script>
+		$(document).ready(function () {
+
+$(window).scroll(function () {
+
+var position = $(window).scrollTop();
+var bottom = $(document).height() - $(window).height();
+
+if (position == bottom) {
+
+var row = Number($('#row').val());
+var allcount = Number($('#all').val());
+var rowperpage = 3;
+row = row + rowperpage;
+
+if (row <= allcount) {
+$('#row').val(row);
+$.ajax({
+url: Routing.generate('figure_view', {id}),
+type: 'post',
+data: {
+row: row
+},
+success: function (response) {
+$(".post:last").after(response).show().fadeIn("slow");
+}
+});
+}
+}
+
+});
+
+});
+	</script>
 
 {% endblock %}
