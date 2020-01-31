@@ -18,10 +18,10 @@ class ForgotPasswordType extends AbstractType
         ->add('email', EmailType::class, 
         ['label' => 'Email :',  
         'attr' => [
-            'placeholder' => "Veuillez saisir votre email"
+            'placeholder' => "Please enter your email"
         ],
-            'constraints' => [new Email(['message' => "Votre email n'est pas valide"]),
-                new NotBlank(['message' => "Veuillez saisir votre email"])]]);
+            'constraints' => [new Email(['message' => "The email is not valid"]),
+                new NotBlank(['message' => "Please enter your email"])]]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

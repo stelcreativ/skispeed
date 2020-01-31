@@ -16,7 +16,7 @@ class VideoType extends AbstractType
     {
         $builder
             ->add('url', TextareaType::class,
-            ['label' => 'Ajouter une Vidéo',
+            ['label' => 'Add a Video',
             'attr'=>['accept'=> 'url'],
             'label_attr'=>[ 'class'=>'btn btn-dark'],
             ])

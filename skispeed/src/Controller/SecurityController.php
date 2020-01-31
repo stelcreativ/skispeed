@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success', 'Votre compte a bien été enregistré!');
+            $this->addFlash('success', 'Your account has been registered!');
 
             return $this->redirectToRoute('security_login');
 
@@ -71,13 +71,13 @@ class SecurityController extends AbstractController
                 $em->persist($user);
                 $em->flush();
 
-                $this->addFlash('success', 'votre mot de pass a bien été modifié!');
+                $this->addFlash('success', 'Your password has been changed!');
             }
             return $this->redirectToRoute('security_login');
         }
         else {
             if($user === null) {
-                $this->addFlash('danger', 'Echec de modification du mot de passe! Lien introuvable.');
+                $this->addFlash('danger', 'Password change failed! Unknown link.');
             }
         }
         return $this->render('security/resetPassword.html.twig', 
@@ -122,7 +122,7 @@ class SecurityController extends AbstractController
             UrlGeneratorInterface::ABSOLUTE_URL
             );
 
-              $message =  (new \Swift_Message('Réinitialisation du mot de passe'))
+              $message =  (new \Swift_Message('Password reset'))
               ->setFrom($this->getParameter('mailer_user'))
               ->setTo($user->getEmail())
               ->setBody(
@@ -135,7 +135,7 @@ class SecurityController extends AbstractController
                   $mailer->send($message);
                   $this->addFlash(
                       'success',
-                      "Nous vous avons envoyé un email de réinitialisation à l'adresse email enregistrée pour le compte !"
+                      "We sent a reset link to the email adress registered on your account !"
                   );
 
                   return $this->redirectToRoute('security_password_forgot');

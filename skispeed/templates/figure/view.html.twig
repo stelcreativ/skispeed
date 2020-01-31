@@ -1,148 +1,185 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+	<button id="arrowdown">
+		<i class="arrow-down fas fa-2x fa-arrow-down"></i>
+	</button>
 
 
-	<div class="container media">
-
-		{% for image in figure.images %}
-			<h2>{{figure.name}}</h2>
-			{% if loop.index == 1 %}
-				<div class="container">
-					<div class="carousel-item active">
-						<img class="w-100" src="{{ asset('images/uploads/' ~ image.name) }}" alt="ImageBase">
-					</div>
-
-					{% if app.user %}
-						<div class="userstyle">
-							<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
-								<i class="fas fa-pencil-alt"></i>
-							</a>
-							<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
-							<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
-							<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
-								<i class="fas fa-trash-o"></i>
-							</a>
-						</div>
-
-					{% endif %}
-				{% endif %}
-
-
-			{% else %}
-
-				<div class="carousel-item active">
-					<img class="card-img-top" height='500px' width='auto' src="{{ asset('images/snowslide1.jpg') }}"></div>
-				{% if app.user %}
-					<div class="userstyle">
-						<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
-							<i class="fas fa-pencil-alt"></i>
-						</a>
-						<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Supprimer</button>
-						<i class="fa fa-2x fa-trash-o d-block d-sm-none" data-toggle="modal" data-target="#"></i>
-						<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
-							<i class="fas fa-trash-o"></i>
-						</a>
-					</div>
-				{% endif %}
-			{% endfor %}
-		</div>
-
-		<div class="container">
-			<div class="row">
-				{{dump(figure)}}
+	<div
+		class="Container MediaGroup">
+		<!--Main image-->
+		<div class="card-deck">
+			<div class="mx-auto">
+				<h4 class="card-title text-center text-uppercase py-4">{{figure.name}}</h4>
 
 				{% for image in figure.images %}
+
 					{% if loop.index == 1 %}
-						<div class="col-lg-4">
-							<div class="card">
-								<img src="{{ asset('images/uploads/' ~ image.name) }}" alt="style" width="100%">
-							</div>
+						<div class="DefaultImage">
+							<img class="w-auto" height="500" src="{{ asset('images/uploads/' ~ image.name) }}" alt="ImageBase">
 						</div>
 
+						{% if app.user %}
+							<div class="card-body text-center mt-3">
+								<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
+									<button type="button" class="btn btn-outline-success ml-5 my-2 d-none d-sm-block" data-toggle="modal" data-target="#">Edit</button>
+									<i class="fas fa-pencil-alt d-block d-sm-none text-center" data-toggle="modal" data-target="#"></i>
+								</a>
+
+								<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
+									<button type="button" class="btn btn-dark ml-5 my-2 d-none d-sm-block" data-toggle="modal" data-target="#">Delete</button>
+									<i class="fas fa-trash-alt d-block d-sm-none" data-toggle="modal" data-target="#"></i>
+								</a>
+							</div>
+						{% endif %}
 					{% endif %}
+
+
+				{% else %}
+
+					<div class="DefaultImage">
+						<img class="w-auto" height="500" src="{{ asset('images/snowslide1.jpg') }}">
+					</div>
+					{% if app.user %}
+						<div class="card-body text-center mt-4">
+							<a href=" {{ path('figure_edit', {'id': figure.id}) }}">
+								<i class="fas fa-pencil-alt"></i>
+								<button type="button" class="btn btn-outline-success">Edit</button>
+							</a>
+							<a href=" {{ path('figure_delete', {'id': figure.id}) }}">
+								<i class="fas fa-trash-alt d-block d-sm-none" data-toggle="modal" data-target="#">"></i>
+								<button class="btn btn-dark ml-4 d-none d-sm-block" data-toggle="modal" data-target="#">Delete</button>
+							</a>
+						</div>
+					{% endif %}
+
 				{% endfor %}
 
 			</div>
-			<div class="embed-responsive embed-responsive-16by9">
-				{% for video in figure.videos %}
-					{#<iframe id="video{{ video.id }}" width="100%"></iframe> #}
-					<iframe class="embed-responsive-item" src="https://www.youtube.com/watch?v=z-gD3esFIm8" allowfullscreen></iframe>
+		</div>
+	</div>
+
+
+	<!--3 images in row-->
+	<div class="container">
+		<div class="row">
+
+			{% for image in figure.images %}
+				<div class="col-lg-4 col-md-6">
+					<div class="card" id="Images">
+
+						<div class="card-body">
+							<div class="pop">
+								<img id="imageresource" src="{{ asset('images/uploads/' ~ image.name) }}" class="clickable" style="width: 250px; height: 350px;">
+							</div>
+							<div class="card-title text-center">Click to Enlarge</div>
+						</div>
+					</div>
+				</div>
+
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<!-- Bootstrap modal where the image will appear -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">preview</h4>
+			</div>
+			<div class="modal-body">
+				<img src="" id="imagepreview" style="width: 400px; height: 600px;">
+			</div>
+			<div class="modal-footer">
+				<a href="{{path('figure_edit',{'id':figure.id})}}">
+					<button type="button" class="btn btn-primary">Edit<button/></a>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 py-4">
+				<div class="card-header text-center">Description</div>
+				<div class="card-body">
+					<p class="card-text text-center">
+						{{ figure.description }}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="card-header text-center">Comment section</div>
+			{% if app.user %}
+				<div class="form-group text-center">
+					{{ form_start(CommentForm) }}
+					{{ form_widget(CommentForm) }}
+					{{ form_end(CommentForm) }}
+				</div>
+			{% endif %}
+		</div>
+		<hr>
+		<section id="comments">
+			{% for comment in figure.comments %}
+				<div class="row mx-auto">
+					<div class="col-md-10 col-12 mx-auto">
+						<p class="text-center">
+							{{ comment.user }}, le
+							{{ comment.createdAt | date('d/m/Y à H:i') }}
+						</p>
+						<hr>
+
+						{{ comment.content }}
+					</div>
 				</div>
 			{% endfor %}
-
 		</div>
-	</div>
-
-	<div class="row">
-		<div id="fdescription">
-
-			<h3>Description</h3>
-			{{ figure.description }}</div>
-	</div>
-	<div class="row">
-		<h3>Espace de discussion</h3>
-		{% if app.user %}
-			<div class="col-sm-4 col-md-3 col-6 col-xl-4">
-				{{ form_start(CommentForm) }}
-				{{ form_widget(CommentForm) }}
-				<button type="submit" class="btn btn-success">Envoi</button>
-				{{ form_end(CommentForm) }}
-
-			</div>
-		{% endif %}
-
-	</div><hr>
-	{% for comment in figure.comments %}
-		<div class="row">
-			<div class="col-lg-6 col-xs-12 mx-auto">
-				<p>
-					{{ comment.user }}, le
-					{{ comment.createdAt | date('d/m/Y à H:i') }}
-				</p>
-				<br>
-
-				{{ comment.content }}
-			</div>
-		</div>
-	{% endfor %}
+	</section>
 {% endblock %}
-
 {% block javascripts %}
 
+	{{ parent() }}
+
+
 	<script>
-		$(document).ready(function () {
-
-$(window).scroll(function () {
-
-var position = $(window).scrollTop();
-var bottom = $(document).height() - $(window).height();
-
-if (position == bottom) {
-
-var row = Number($('#row').val());
-var allcount = Number($('#all').val());
-var rowperpage = 3;
-row = row + rowperpage;
-
-if (row <= allcount) {
-$('#row').val(row);
-$.ajax({
-url: Routing.generate('figure_view', {id}),
-type: 'post',
-data: {
-row: row
-},
-success: function (response) {
-$(".post:last").after(response).show().fadeIn("slow");
-}
-});
-}
-}
-
-});
-
+		$("img").on("click", function () {
+$('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
+$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
 });
 	</script>
 
+	<script type="text/javascript">
+
+		var arrowdown = $('#arrowdown');
+
+$(function () {
+$('#arrowdown').on('click', function (e) {
+e.preventDefault();
+$(this).get(0).scrollIntoView();
+});
+});
+	</script>
+	<script type="text/javascript">
+
+
+		var arrow = document.getElementById('#arrow');
+
+$(window).onscroll(function () {
+if ($(this).scrollTop() > 20 || document.documentElement.scrollTop > 20) {
+arrow.show();
+} else {
+arrow.hide()
+}
+
+});
+	</script>
 {% endblock %}

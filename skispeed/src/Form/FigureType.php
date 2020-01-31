@@ -23,20 +23,24 @@ class FigureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Nom', 
-            'attr' => ['placeholder' => 'Nom de la figure'],
-            'constraints' => [new NotBlank(['message' => 'Veuillez saisir le nom'])]])
+            ->add('name', TextType::class, ['label' => 'Name', 
+            'attr' => ['placeholder' => 'Name of the trick'],
+            'constraints' => [new NotBlank(['message' => 'Please enter the name'])]])
             
             ->add('description', TextareaType::class, ['label' => 'Description',
-            'attr' => ['placeholder' => 'Description de la figure'],
-            'constraints' => [new NotBlank(['message' => 'Veuillez saisir la description']),
-                new Length(['max' => 1500, 'maxMessage' => 'Le message ne doit pas contenir plus de 1500 caractères'])]])
+            'attr' => ['placeholder' => 'Description of the trick'],
+            'constraints' => [new NotBlank(['message' => 'Please enter the description']),
+                new Length(['max' => 1500, 'maxMessage' => 'the message cannot contain more than 1500 digits'])]])
                 
                 
             ->add('images', CollectionType::class, [
                 'entry_type'    => ImageType::class,
+                'entry_options' => [
+                    'label' => false
+                ],
                 'allow_add'     => true,
                 'allow_delete'  => true,
+                'prototype'     => true,
                 'required'      => false,
                 'by_reference'  => false,
 
@@ -46,20 +50,21 @@ class FigureType extends AbstractType
                     'entry_type'    => VideoType::class,
                     'allow_add'     =>  true,
                     'allow_delete'  =>  true,
+                    'prototype'     =>  true,
                     'required'      =>  false,
                     'by_reference'  =>  false
                 ]
             )
 
             ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer la figure',
+                'label' => 'Save the trick',
                  'attr'=> ['class'=>'btn btn-success submitButton'] 
                 ] )
                 
              ->add('cancel',
                     ButtonType::class,
                     [
-                    'label' => "Annuler"
+                    'label' => "Cancel"
                     ]
                 );
 

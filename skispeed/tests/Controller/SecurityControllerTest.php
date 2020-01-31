@@ -2,9 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class SecurityControllerTest{
+class SecurityControllerTest extends WebTestCase
+{
     public function testRegisterIsUp()
     {
         $client = static::createClient();

@@ -19,13 +19,13 @@ class ResetPasswordType extends AbstractType
         [
             
             'type'=> PasswordType::class,
-            'invalid_message' => 'les champs du mot de passe doivent être identiques',
-            'first_options'=> [ 'label'=> 'Entrez le mot de passe' ],
-            'second_options'=> [ 'label'=> 'Veuillez resaisir le mot de passe' ]
+            'invalid_message' => 'The fields must be identical',
+            'first_options'=> [ 'label'=> 'Enter Password' ],
+            'second_options'=> [ 'label'=> 'Please retype password' ]
     
         ]) 
         ->add('submit', SubmitType::class,
-        [ 'label'=> 'Réinitialiser le mot de passe']
+        [ 'label'=> 'Reset Password']
         )
     
         

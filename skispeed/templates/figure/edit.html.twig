@@ -1,31 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edition de figures
+{% block title %}Editing tricks
 {% endblock %}
 
 {% block body %}
 
-	<div class="col-lg-6 col-md-12 mx-auto">
+	<div class="col-lg-6 col-md-12 mx-auto my-5">
 		{{ form_start(form) }}
 
 		{{ form_row(form.name) }}
 		{{ form_row(form.description) }}
 
-		<div class="row">
-			<div class="col-sm-6">
-				{{ form_errors(form) }}
-				{{ form_widget(form) }}
-				{{ form_help(form) }}
-				{ dump(images) }
+		{{ form_errors(form) }}
+		{{ form_widget(form) }}
+		{{ form_help(form) }}
+
+		{{ form_end(form) }}
+		<div class="container">
+			<div class="row">
+
 				{% for image in figure.images %}
-					<div class="StyleEdit"><input type="hidden" name="image_to_keep" value="{{ image.id }}">
-						<img class="img-card-top" height="350px" src="{{ asset('images/uploads/' ~ image.name) }}">
+
+					<div class="col-lg-4 md-6 col-sm-6">
+						<div class="card">
+							<div class="StyleEdit">
+								<img class="img-thumbnail" height="250px" src="{{ asset('images/uploads/' ~ image.name) }}">
+							</div>
+						</div>
 					</div>
 				{% endfor %}
-				<button type="submit" class="btn btn-success">
-					<span class="fa fa-pencil">Éditer la figure</span>
-				</button>
-				{{ form_end(form) }}
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}
